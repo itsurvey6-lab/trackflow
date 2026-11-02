@@ -64,7 +64,12 @@ app.get("/api/health", async (req, res) => {
       databaseTime: result.rows[0].database_time,
     });
   } catch (error) {
-    console.error("Database health check failed:", error);
+    console.error("Database health check failed:", {
+      message: error.message,
+      code: error.code,
+      detail: error.detail,
+      severity: error.severity,
+    });
 
     res.status(500).json({
       status: "error",
