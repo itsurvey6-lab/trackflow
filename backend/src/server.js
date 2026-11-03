@@ -17,12 +17,25 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigin =
-  process.env.FRONTEND_URL || "http://localhost:5173";
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter(Boolean);
+
+const isAllowedOrigin = (origin) =>
+  !origin ||
+  allowedOrigins.includes(origin) ||
+  /^https:\/\/trackflow-frontend-[a-z0-9-]+-ss-8e6f\.vercel\.app$/.test(origin);
 
 app.use(
   cors({
-    origin: allowedOrigin,
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
