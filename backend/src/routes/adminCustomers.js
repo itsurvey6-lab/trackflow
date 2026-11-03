@@ -341,20 +341,21 @@ router.patch("/:id/status", async (req, res) => {
       SET
         account_status = $1,
         blocked_at = CASE
-          WHEN $1 = 'blocked' THEN CURRENT_TIMESTAMP
+          WHEN $2 = 'blocked' THEN CURRENT_TIMESTAMP
           ELSE NULL
         END,
         block_reason = CASE
-          WHEN $1 = 'blocked' THEN $2
+          WHEN $2 = 'blocked' THEN $3
           ELSE NULL
         END,
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $3 AND role = 'customer'
+      WHERE id = $4 AND role = 'customer'
       RETURNING
         id, full_name, email, account_status,
         blocked_at, block_reason
       `,
       [
+        account_status,
         account_status,
         account_status === "blocked" ? block_reason || null : null,
         customerId,
