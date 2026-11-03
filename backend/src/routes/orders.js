@@ -1311,6 +1311,11 @@ router.delete(
       );
 
       await client.query(
+        "DELETE FROM notifications WHERE order_id = $1",
+        [orderId]
+      );
+
+      await client.query(
         "DELETE FROM orders WHERE id = $1",
         [orderId]
       );
