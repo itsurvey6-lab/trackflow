@@ -13,6 +13,7 @@ import Reports from "./pages/Reports";
 import Customers from "./pages/admin/Customers";
 
 
+// CI/CD automation verification
 function App() {
   return (
     <BrowserRouter>
